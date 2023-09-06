@@ -1,21 +1,54 @@
-import styled from "styled-components";
+// keyframes import
+import styled, { keyframes } from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
   display: flex;
 `;
 
-const Input = styled.input.attrs({ required: true, minLength: 10 })`
+// keyframes로 애니메이션 만들기
+const rotateAnimation = keyframes`
+  0% {
+    transform: rotate(0deg);
+    border-radius: 10%;
+  } 
+  50% {
+    border-radius: 50%;
+    transform: rotate(120deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    border-radius: 10%;
+  }
+`;
+
+const Box = styled.div`
+  height: 200px;
+  width: 200px;
   background-color: tomato;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // 애니메이션 적용
+  animation: ${rotateAnimation} 1s linear infinite;
+  // styled components의 자식 컴포넌트에 스타일 적용
+  span {
+    font-size: 36px;
+    transition: all 0.5s ease;
+    cursor: default;
+    // & == span
+    &:hover {
+      transform: scale(2);
+    }
+  }
 `;
 
 function App() {
   return (
-    <Father as="header">
-      <Input />
-      <Input />
-      <Input />
-      <Input />
-    </Father>
+    <Wrapper>
+      <Box>
+        <span>😘</span>
+      </Box>
+    </Wrapper>
   );
 }
 
