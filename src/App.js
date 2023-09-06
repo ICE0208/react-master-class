@@ -1,13 +1,15 @@
-// keyframes import
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Reset } from "styled-reset";
 
 const Wrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 `;
 
-// keyframes로 애니메이션 만들기
 const rotateAnimation = keyframes`
   0% {
     transform: rotate(0deg);
@@ -23,6 +25,10 @@ const rotateAnimation = keyframes`
   }
 `;
 
+const Emoji = styled.span`
+  font-size: 36px;
+`;
+
 const Box = styled.div`
   height: 200px;
   width: 200px;
@@ -32,14 +38,12 @@ const Box = styled.div`
   align-items: center;
   // 애니메이션 적용
   animation: ${rotateAnimation} 1s linear infinite;
-  // styled components의 자식 컴포넌트에 스타일 적용
-  span {
-    font-size: 36px;
+  // styled component의 자식 styled component에 스타일 적용
+  ${Emoji} {
     transition: all 0.5s ease;
     cursor: default;
-    // & == span
     &:hover {
-      transform: scale(2);
+      font-size: 98px;
     }
   }
 `;
@@ -50,7 +54,7 @@ function App() {
       <Reset />
       <Wrapper>
         <Box>
-          <span>😘</span>
+          <Emoji>😘</Emoji>
         </Box>
       </Wrapper>
     </React.Fragment>
