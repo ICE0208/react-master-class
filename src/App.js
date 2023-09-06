@@ -1,6 +1,10 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
-import { Reset } from "styled-reset";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  color: ${(props) => props.theme.textColor};
+  font-size: 32px;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -8,54 +12,24 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background-color: ${(props) => props.theme.backgroundColor};
 `;
 
-const rotateAnimation = keyframes`
-  0% {
-    transform: rotate(0deg);
-    border-radius: 10%;
-  } 
-  50% {
-    border-radius: 50%;
-    transform: rotate(120deg);
-  }
-  100% {
-    transform: rotate(360deg);
-    border-radius: 10%;
-  }
+// Button 컴포넌트 추가
+const Button = styled.button`
+  padding: 10px;
+  margin-top: 10px;
+  cursor: pointer;
 `;
 
-const Emoji = styled.span`
-  font-size: 36px;
-`;
-
-const Box = styled.div`
-  height: 200px;
-  width: 200px;
-  background-color: tomato;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  // 애니메이션 적용
-  animation: ${rotateAnimation} 1s linear infinite;
-  // styled component의 자식 styled component에 스타일 적용
-  ${Emoji} {
-    transition: all 0.5s ease;
-    cursor: default;
-    &:hover {
-      font-size: 98px;
-    }
-  }
-`;
-
-function App() {
+function App({ toggleTheme }) {
+  // props로 toggle function 받기
   return (
     <React.Fragment>
-      <Reset />
       <Wrapper>
-        <Box>
-          <Emoji>😘</Emoji>
-        </Box>
+        <Title>Hello</Title>
+        <Button onClick={toggleTheme}>Toggle Theme</Button>{" "}
+        {/* 버튼 클릭시 테마 변경 */}
       </Wrapper>
     </React.Fragment>
   );
