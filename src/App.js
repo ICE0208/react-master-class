@@ -1,5 +1,7 @@
 // keyframes import
+import React from "react";
 import styled, { keyframes } from "styled-components";
+import { Reset } from "styled-reset";
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,11 +46,14 @@ const Box = styled.div`
 
 function App() {
   return (
-    <Wrapper>
-      <Box>
-        <span>😘</span>
-      </Box>
-    </Wrapper>
+    <React.Fragment>
+      <Reset />
+      <Wrapper>
+        <Box>
+          <span>😘</span>
+        </Box>
+      </Wrapper>
+    </React.Fragment>
   );
 }
 
