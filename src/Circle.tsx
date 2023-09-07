@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-// Container props의 인터페이스
 interface ContainerProps {
   bgColor: string;
+  borderColor: string;
 }
 
 const Container = styled.div<ContainerProps>`
@@ -10,16 +10,35 @@ const Container = styled.div<ContainerProps>`
   height: 200px;
   background-color: ${(props) => props.bgColor};
   border-radius: 100px;
+  border: 53px solid ${(props) => props.borderColor};
+  box-sizing: border-box;
 `;
 
-// Circle props의 인터페이스
 interface CircleProps {
   bgColor: string;
+  // Optional Props
+  borderColor?: string;
 }
 
-// == function Circle(props: CircleProps) {
-function Circle({ bgColor }: CircleProps) {
-  return <Container bgColor={bgColor} />;
+function Circle({ bgColor, borderColor }: CircleProps) {
+  return (
+    <Container
+      bgColor={bgColor}
+      // Null 병합 연산자
+      borderColor={borderColor ?? bgColor}
+    />
+  );
 }
+
+// OR
+
+// function Circle({ bgColor, borderColor = "black" }: CircleProps) {
+//   return (
+//     <Container
+//       bgColor={bgColor}
+//       borderColor={borderColor}
+//     />
+//   );
+// }
 
 export default Circle;
