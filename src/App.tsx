@@ -22,7 +22,7 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-function App({ toggleTheme }) {
+function App({ toggleTheme }: { toggleTheme: () => void }) {
   // props로 toggle function 받기
   return (
     <React.Fragment>
