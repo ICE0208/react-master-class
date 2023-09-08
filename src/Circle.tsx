@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 interface ContainerProps {
@@ -21,6 +22,11 @@ interface CircleProps {
 }
 
 function Circle({ bgColor, borderColor }: CircleProps) {
+  // useState에 기본값을 주면 자동으로 타입을 추론해준다. (제네릭을 안썼을 때)
+  const [counter, setCounter] = useState<number | string>(1);
+  setCounter(2); // number
+  setCounter("hello"); // string
+  // setCounter(true) <-- Error
   return (
     <Container
       bgColor={bgColor}
@@ -29,16 +35,5 @@ function Circle({ bgColor, borderColor }: CircleProps) {
     />
   );
 }
-
-// OR
-
-// function Circle({ bgColor, borderColor = "black" }: CircleProps) {
-//   return (
-//     <Container
-//       bgColor={bgColor}
-//       borderColor={borderColor}
-//     />
-//   );
-// }
 
 export default Circle;
