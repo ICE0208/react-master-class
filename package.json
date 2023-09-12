@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^4.35.0",
     "@types/react-router-dom": "^5.3.3"
   }
 }
