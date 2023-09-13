@@ -61,9 +61,28 @@ function Chart({ coinId }: ChartProps) {
               labels: { show: false },
               axisBorder: { show: false },
               axisTicks: { show: false },
+              type: "datetime",
+              categories:
+                data?.map((price) => {
+                  let date = new Date(price.time_close * 1000);
+                  return date.toLocaleString("ko-KR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  });
+                }) ?? [],
             },
             yaxis: { show: false },
-            tooltip: { enabled: false },
+            tooltip: { y: { formatter: (value) => `$${value.toFixed(3)}` } },
+            fill: {
+              type: "gradient",
+              gradient: {
+                gradientToColors: ["#e25959", "#006bf8"],
+                stops: [0, 100],
+              },
+            },
           }}
         />
       )}
