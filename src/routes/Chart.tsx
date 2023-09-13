@@ -61,7 +61,7 @@ function Chart({ coinId }: ChartProps) {
               labels: { show: false },
               axisBorder: { show: false },
               axisTicks: { show: false },
-              type: "datetime",
+              // type: "datetime",
               categories:
                 data?.map((price) => {
                   let date = new Date(price.time_close * 1000);
