@@ -27,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +53,6 @@
     "@tanstack/react-query-devtools": "^4.35.0",
     "@types/react-helmet": "^6.1.6",
     "@types/react-router-dom": "^5.3.3"
-  }
+  },
+  "homepage": "https://ice0208.github.io/react-master-class/"
 }
