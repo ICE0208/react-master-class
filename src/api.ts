@@ -22,6 +22,10 @@ export async function fetchCoinHistory(coinId: string) {
   const response = await fetch(
     `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
   );
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
   const json = await response.json();
   return json;
 }

@@ -18,15 +18,19 @@ interface ChartProps {
 }
 
 function Chart({ coinId }: ChartProps) {
-  const { isLoading, data } = useQuery<IHistorical[]>({
+  const { isLoading, data, isError } = useQuery<IHistorical[]>({
     queryKey: ["ohlcv", coinId],
     queryFn: () => fetchCoinHistory(coinId),
+    retry: false,
+    refetchOnWindowFocus: false, // 창이 focus될 때 refetch
   });
 
   return (
     <div>
       {isLoading ? (
         "Loading chart..."
+      ) : isError ? (
+        <h1>No data</h1>
       ) : (
         <ApexChart
           type="line"

@@ -143,11 +143,13 @@ function Coin() {
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>({
     queryKey: ["info", `${coinId}`],
     queryFn: () => fetchCoinInfo(coinId),
+    refetchOnWindowFocus: false,
   });
   const { isLoading: tickersLoading, data: tickersData } = useQuery<PriceData>({
     queryKey: ["tickers", `${coinId}`],
     queryFn: () => fetchCoinTickers(coinId),
-    refetchInterval: 5000, // 지정된 시간 간격으로 계속 반복
+    refetchOnWindowFocus: false,
+    // refetchInterval: 5000, // 지정된 시간 간격으로 계속 반복
   });
 
   const loading = infoLoading || tickersLoading;
