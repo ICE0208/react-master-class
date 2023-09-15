@@ -25,7 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PUBLIC_URL=/ react-scripts start",
     "build": "react-scripts build",
     "postbuild": "cp build/index.html build/404.html",
     "test": "react-scripts test",
