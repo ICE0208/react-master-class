@@ -75,6 +75,7 @@ function Coins() {
       </Helmet>
       <Header>
         <Title>Coin</Title>
+        <button>Toggle Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
