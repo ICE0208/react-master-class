@@ -8,10 +8,3 @@ export const darkTheme: DefaultTheme = {
   accentColor: "#8c7ae6",
   boxColor: "rgba(0, 0, 0, 0.5)",
 };
-
-export const lightTheme: DefaultTheme = {
-  bgColor: "whitesmoke",
-  textColor: "black",
-  accentColor: "#8c7ae6",
-  boxColor: "white",
-};
