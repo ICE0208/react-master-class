@@ -30,32 +30,52 @@ import { useForm } from "react-hook-form";
 // }
 
 function ToDoList() {
-  const { register, watch } = useForm();
-  console.log(watch());
+  const { register, handleSubmit, formState } = useForm();
+  const onValid = (data: any) => {
+    console.log(data);
+  };
+  console.log(formState.errors);
 
   return (
     <div>
-      <form>
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}
+      >
         <input
-          {...register("Email")}
+          {...register("email", { required: "Email is required" })}
           placeholder="Email"
         />
         <input
-          {...register("Username")}
+          {...register("username", {
+            required: "Username is required",
+            minLength: { value: 10, message: "your password is too short" },
+          })}
           placeholder="Username"
         />
         <input
-          {...register("Password")}
+          {...register("password", {
+            required: "Password is required",
+            minLength: { value: 5, message: "your password is too short" },
+          })}
           placeholder="Password"
         />
         <input
-          {...register("Password Confirm")}
+          {...register("password2", {
+            required: "Password2 is required",
+            minLength: { value: 5, message: "your password is too short" },
+          })}
           placeholder="Password Confirm"
         />
         <button>Add</button>
       </form>
     </div>
   );
+  /*
+    input의 기본 required 속성을 사용하면 디버깅 툴로 쉽게 제거할 수 있음
+    react-hook-form에서 required는 자바스크립트에서 제어하기 때문에 조금 더 안전할 수 있음
+
+   */
 }
 
 export default ToDoList;
