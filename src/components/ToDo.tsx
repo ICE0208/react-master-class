@@ -6,10 +6,9 @@ function ToDo({ text, category, id }: IToDo) {
   const OnClick = (newCategory: IToDo["category"]) => {
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      const oldTodo = oldToDos[targetIndex];
-      const newToDo = { ...oldTodo, category: newCategory };
+      const newToDo: IToDo = { text, id, category: newCategory };
       const newToDos = [...oldToDos];
-      newToDos[targetIndex] = newToDo;
+      newToDos.splice(targetIndex, 1, newToDo);
       return newToDos;
     });
   };
