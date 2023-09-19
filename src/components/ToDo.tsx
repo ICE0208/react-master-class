@@ -24,7 +24,6 @@ function ToDo({ text, category, id }: IToDo) {
         <button onClick={() => OnClick("DONE")}>DONE</button>
       )}
       <span style={{ marginLeft: "10px" }}>{text}</span>
-      <span style={{ marginLeft: "10px" }}>{category}</span>
     </li>
   );
 }
