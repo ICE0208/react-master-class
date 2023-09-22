@@ -3,12 +3,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
-import { darkTheme } from "./theme";
+import { theme } from "./theme";
 
 function Main() {
   return (
     <RecoilRoot>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <Globalstyle />
         <App />
       </ThemeProvider>
@@ -75,7 +75,7 @@ table {
 body {
   font-family: 'Source Sans 3', sans-serif;
   background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor}
+  color: black
 }
 a {
   text-decoration: none;
