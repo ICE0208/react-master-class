@@ -1,11 +1,18 @@
-import { todo } from "node:test";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
-
-const toDos = ["a", "b", "c", "d", "e", "f"];
+import { toDoState } from "./atoms";
 
 function App() {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] = useRecoilState(toDoState);
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    // code
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -20,7 +27,7 @@ function App() {
                   <Draggable
                     key={index}
                     draggableId={toDo}
-                    index={1}
+                    index={index}
                   >
                     {(magic) => (
                       <Card
