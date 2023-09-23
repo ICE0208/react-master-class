@@ -10,8 +10,16 @@ import { toDoState } from "./atoms";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    // code
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setToDos((oldToDos) => {
+      const toDosCopy = [...oldToDos];
+      // 1) Delete Item on source.index
+      toDosCopy.splice(source.index, 1);
+      // 2) Put back the item on the destination.index
+      toDosCopy.splice(destination?.index, 0, draggableId);
+      return toDosCopy;
+    });
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -24,8 +32,9 @@ function App() {
                 {...magic.droppableProps}
               >
                 {toDos.map((toDo, index) => (
+                  // key와 draggableId는 같아야 한다.
                   <Draggable
-                    key={index}
+                    key={toDo}
                     draggableId={toDo}
                     index={index}
                   >
