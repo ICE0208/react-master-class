@@ -1,12 +1,8 @@
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from "react-beautiful-dnd";
+import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
+import DraggableCard from "./components/DraggableCard";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -33,21 +29,11 @@ function App() {
               >
                 {toDos.map((toDo, index) => (
                   // key와 draggableId는 같아야 한다.
-                  <Draggable
+                  <DraggableCard
                     key={toDo}
-                    draggableId={toDo}
                     index={index}
-                  >
-                    {(magic) => (
-                      <Card
-                        ref={magic.innerRef}
-                        {...magic.dragHandleProps}
-                        {...magic.draggableProps}
-                      >
-                        {toDo}
-                      </Card>
-                    )}
-                  </Draggable>
+                    toDo={toDo}
+                  />
                 ))}
                 {magic.placeholder}
               </Board>
@@ -71,13 +57,6 @@ const Board = styled.div`
   border-radius: 5px;
   background-color: ${(props) => props.theme.boardColor};
   min-height: 200px;
-`;
-
-const Card = styled.div`
-  border-radius: 5px;
-  padding: 10px 10px;
-  margin-bottom: 5px;
-  background-color: ${(props) => props.theme.cardColor};
 `;
 
 const Wrapper = styled.div`
