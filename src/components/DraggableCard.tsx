@@ -5,14 +5,14 @@ import styled from "styled-components";
 interface IDraggableCardProps {
   toDo: string;
   index: number;
+  draggableId: string;
 }
 
-const DraggableCard = ({ toDo, index }: IDraggableCardProps) => {
-  console.log(toDo);
+const DraggableCard = ({ toDo, index, draggableId }: IDraggableCardProps) => {
   return (
     <Draggable
       key={toDo}
-      draggableId={toDo}
+      draggableId={draggableId}
       index={index}
     >
       {(magic) => (
