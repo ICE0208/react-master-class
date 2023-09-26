@@ -1,4 +1,4 @@
-import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
@@ -6,16 +6,36 @@ import Board from "./components/Board";
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
+    const { destination, source } = info;
     if (!destination) return;
-    /* setToDos((oldToDos) => {
-      const toDosCopy = [...oldToDos];
-      // 1) Delete Item on source.index
-      toDosCopy.splice(source.index, 1);
-      // 2) Put back the item on the destination.index
-      toDosCopy.splice(destination?.index, 0, draggableId);
-      return toDosCopy;
-    }); */
+    if (destination.droppableId === source.droppableId) {
+      // same board movement.
+      setToDos((oldToDos) => {
+        const boardCopy = [...oldToDos[source.droppableId]];
+        const sourceToDo = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination.index, 0, sourceToDo);
+        return {
+          ...oldToDos,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    } else {
+      // cross board movement.
+      setToDos((oldToDos) => {
+        const sourceBoard = [...oldToDos[source.droppableId]];
+        const destinationBoard = [...oldToDos[destination.droppableId]];
+        const sourceToDo = sourceBoard[source.index];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination.index, 0, sourceToDo);
+        return {
+          ...oldToDos,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      });
+    }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -37,14 +57,13 @@ function App() {
 const Boards = styled.div`
   display: grid;
   width: 100%;
-  gap: 10;
+  gap: 10px;
   grid-template-columns: repeat(3, 1fr);
 `;
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 480px;
-  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
   justify-content: center;
   align-items: center;

@@ -30,9 +30,10 @@ const DraggableCard = ({ toDo, index, draggableId }: IDraggableCardProps) => {
 
 const Card = styled.div`
   border-radius: 5px;
-  padding: 10px 10px;
+  padding: 14px 10px;
   margin-bottom: 5px;
   background-color: ${(props) => props.theme.cardColor};
+  font-size: 18px;
 `;
 
 // prop이 변하지 않았다면 리렌더링 금지

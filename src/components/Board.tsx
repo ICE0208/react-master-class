@@ -9,34 +9,52 @@ interface IBoardProps {
 
 const Board = ({ toDos, boardId }: IBoardProps) => {
   return (
-    <Droppable droppableId={boardId}>
-      {(magic) => (
-        <Wrapper
-          ref={magic.innerRef}
-          {...magic.droppableProps}
-        >
-          {toDos.map((toDo, index) => (
-            // key와 draggableId는 같아야 한다.
-            <DraggableCard
-              key={`${boardId}|${toDo}`}
-              draggableId={`${boardId}|${toDo}`}
-              index={index}
-              toDo={toDo}
-            />
-          ))}
-          {magic.placeholder}
-        </Wrapper>
-      )}
-    </Droppable>
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(magic) => (
+          <div
+            ref={magic.innerRef}
+            {...magic.droppableProps}
+          >
+            {toDos.map((toDo, index) => {
+              const key = `${boardId.replace(/\|/g, "")}|${toDo.replace(
+                /\|/g,
+                ""
+              )}|${index}`;
+
+              return (
+                // key와 draggableId는 같아야 한다.
+                <DraggableCard
+                  key={key}
+                  draggableId={key}
+                  index={index}
+                  toDo={toDo}
+                />
+              );
+            })}
+            {magic.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
+  padding: 20px 14px;
+  padding-top: 10px;
   border-radius: 5px;
   background-color: ${(props) => props.theme.boardColor};
   min-height: 200px;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  padding: 6px;
+  padding-bottom: 10px;
+  font-weight: boldx;
+  font-size: 24px;
 `;
 
 export default Board;
