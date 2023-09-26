@@ -46,8 +46,8 @@ const Board = ({ toDos, boardId }: IBoardProps) => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px 14px;
   padding-top: 10px;
+  padding-bottom: 0;
   border-radius: 5px;
   background-color: ${(props) => props.theme.boardColor};
   min-height: 200px;
@@ -61,12 +61,13 @@ interface IAreaProps {
 const Area = styled.div<IAreaProps>`
   background-color: ${(props) =>
     props.$isDraggingOver
-      ? "pink"
+      ? "#dfe6e9"
       : props.$draggingFromThisWith
-      ? "red"
-      : "blue"};
+      ? "#b2bec3"
+      : "transparent"};
   flex-grow: 1;
   transition: background-color 0.3s ease-in-out;
+  padding: 14px;
 `;
 
 const Title = styled.h1`
