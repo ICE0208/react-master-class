@@ -1,18 +1,19 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { ITodo } from "../atoms";
 
 interface IDraggableCardProps {
-  toDo: string;
+  toDoId: number;
+  toDoText: string;
   index: number;
-  draggableId: string;
 }
 
-const DraggableCard = ({ toDo, index, draggableId }: IDraggableCardProps) => {
+const DraggableCard = ({ toDoId, toDoText, index }: IDraggableCardProps) => {
   return (
     <Draggable
-      key={toDo}
-      draggableId={draggableId}
+      key={toDoId}
+      draggableId={String(toDoId)}
       index={index}
     >
       {(magic, snapshot) => (
@@ -22,7 +23,7 @@ const DraggableCard = ({ toDo, index, draggableId }: IDraggableCardProps) => {
           {...magic.dragHandleProps}
           {...magic.draggableProps}
         >
-          {toDo}
+          {toDoText}
         </Card>
       )}
     </Draggable>
