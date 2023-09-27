@@ -4,6 +4,7 @@ import {
   motion,
   useMotionValue,
   useMotionValueEvent,
+  useTransform,
 } from "framer-motion";
 import { useEffect, useRef } from "react";
 
@@ -42,14 +43,15 @@ const boxVariants: Variants = {
 
 function App() {
   const x = useMotionValue(0);
+  const scale = useTransform(x, [-800, 0, 800], [2, 1, 0]);
   useMotionValueEvent(x, "change", (l) => {
-    console.log(l);
+    console.log(scale.get());
   });
+
   return (
     <Wrapper>
-      <button onClick={() => x.set(200)}>Click me</button>
       <Box
-        style={{ x }}
+        style={{ x, scale }}
         drag="x"
         dragSnapToOrigin
       />
