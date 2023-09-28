@@ -28,53 +28,59 @@ const Box = styled(motion.div)`
 `;
 
 const box: Variants = {
-  invisible: {
-    x: 500,
+  entry: (isBack: number) => ({
+    x: isBack < 0 ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
-  visible: {
+    zIndex: 0,
+  }),
+  center: {
     x: 0,
     opacity: 1,
     scale: 1,
+    zIndex: 1,
     transition: {
       duration: 0.5,
       type: "spring",
       bounce: 0.4,
     },
   },
-  exit: {
-    x: -500,
+  exit: (isBack: number) => ({
+    x: isBack < 0 ? 500 : -500,
     opacity: 0,
     scale: 0,
+    zIndex: 0,
     transition: {
       duration: 0.5,
     },
-  },
+  }),
 };
 
 function App() {
-  const [visible, setVisible] = useState(1);
-  const nextPlease = () => setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  const [[visible, direction], setVisible] = useState([0, 1]);
+  const move = (direction: number) => {
+    setVisible((prev) =>
+      prev[0] + direction >= 0 && prev[0] + direction <= 100
+        ? [prev[0] + direction, direction]
+        : prev
+    );
+  };
   return (
     <Wrapper>
-      <AnimatePresence>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-          (i) =>
-            i === visible && (
-              <Box
-                variants={box}
-                initial="invisible"
-                animate="visible"
-                exit="exit"
-                key={i}
-              >
-                {i}
-              </Box>
-            )
-        )}
+      <AnimatePresence custom={direction}>
+        <Box
+          custom={direction}
+          variants={box}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={visible}
+        >
+          {visible}
+        </Box>
       </AnimatePresence>
-      <button onClick={nextPlease}>next</button>
+      <button onClick={() => move(1)}>next</button>
+      <button onClick={() => move(-1)}>prev</button>
     </Wrapper>
   );
 }
