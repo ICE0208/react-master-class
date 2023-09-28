@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Wrapper = styled(motion.div)`
   position: relative;
@@ -40,9 +40,9 @@ const box: Variants = {
     scale: 1,
     zIndex: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.2,
       type: "spring",
-      bounce: 0.4,
+      bounce: 0.3,
     },
   },
   exit: (isBack: number) => ({
@@ -51,20 +51,32 @@ const box: Variants = {
     scale: 0,
     zIndex: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.2,
     },
   }),
 };
 
 function App() {
   const [[visible, direction], setVisible] = useState([0, 1]);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    setButtonDisabled(true); // 애니메이션이 진행 중일 때 버튼 비활성화
+  }, [visible]);
+
+  const onAnimationComplete = () => {
+    setButtonDisabled(false); // 애니메이션이 끝나면 버튼 활성화
+  };
+
   const move = (direction: number) => {
     setVisible((prev) =>
-      prev[0] + direction >= 0 && prev[0] + direction <= 100
+      prev[0] + direction >= 0 && prev[0] + direction <= 10
         ? [prev[0] + direction, direction]
         : prev
     );
   };
+
+  console.log(visible, direction);
   return (
     <Wrapper>
       <AnimatePresence custom={direction}>
@@ -75,12 +87,23 @@ function App() {
           animate="center"
           exit="exit"
           key={visible}
+          onAnimationComplete={onAnimationComplete}
         >
           {visible}
         </Box>
       </AnimatePresence>
-      <button onClick={() => move(1)}>next</button>
-      <button onClick={() => move(-1)}>prev</button>
+      <button
+        onClick={() => move(1)}
+        disabled={buttonDisabled}
+      >
+        next
+      </button>
+      <button
+        onClick={() => move(-1)}
+        disabled={buttonDisabled}
+      >
+        prev
+      </button>
     </Wrapper>
   );
 }
