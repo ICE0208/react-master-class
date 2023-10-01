@@ -74,7 +74,7 @@ table {
 }
 body {
   font-family: 'Source Sans 3', sans-serif;
-  background-color: black;
+  background-color: white;
 }
 a {
   text-decoration: none;

@@ -1,7 +1,13 @@
 import styled from "styled-components";
-import { Variants, motion } from "framer-motion";
+import {
+  Variants,
+  motion,
+  useAnimate,
+  useMotionValueEvent,
+  useScroll,
+} from "framer-motion";
 import { Link, useMatch } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const logoVariants: Variants = {
   normal: {
@@ -15,15 +21,57 @@ const logoVariants: Variants = {
   },
 };
 
+const NavVariants: Variants = {
+  bgVisible: { backgroundColor: "rgba(0, 0, 0, 1)" },
+  bgInvisible: { backgroundColor: "rgba(0, 0, 0, 0)" },
+};
+
 function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [isTransparent, setIsTransparent] = React.useState(false);
 
   const homeMatch = useMatch("/");
   const tvMatch = useMatch("/tv");
-  const toggleSearch = () => setSearchOpen((prev) => !prev);
+  const [searchScope, inputAnimate] = useAnimate();
+  const { scrollY } = useScroll();
+  const toggleSearch = () => {
+    inputAnimate(
+      "input",
+      {
+        scaleX: +`${searchOpen ? 0 : 1}`,
+        borderColor: `${
+          isTransparent
+            ? `rgba(0, 0, 0, ${searchOpen ? 0 : 1})`
+            : `rgba(255, 255, 255, ${searchOpen ? 0 : 1})`
+        }`,
+      },
+      { ease: "linear", duration: 0.3 }
+    );
+    setSearchOpen((prev) => !prev);
+  };
+
+  useMotionValueEvent(scrollY, "change", () => {
+    setIsTransparent(scrollY.get() > 80);
+    console.log(isTransparent, searchOpen);
+    inputAnimate(
+      "input",
+      {
+        borderColor: `${
+          isTransparent
+            ? `rgba(0, 0, 0, ${searchOpen ? 1 : 0})`
+            : `rgba(255, 255, 255, ${searchOpen ? 1 : 0})`
+        }`,
+      },
+      { ease: "linear", duration: 0.3 }
+    );
+  });
 
   return (
-    <Nav>
+    <Nav
+      variants={NavVariants}
+      animate={isTransparent ? "bgInvisible" : "bgVisible"}
+      $isTransparent={isTransparent}
+    >
       <Col>
         <Logo
           variants={logoVariants}
@@ -48,14 +96,18 @@ function Header() {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search ref={searchScope}>
           <motion.svg
             onClick={toggleSearch}
-            animate={{ x: searchOpen ? -180 : 0 }}
-            transition={{ ease: "linear" }}
+            animate={{
+              x: searchOpen ? -180 : 0,
+              rotateZ: searchOpen ? -360 : 0,
+            }}
+            transition={{ ease: "linear", duration: 0.3 }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
+            color="inherit"
           >
             <path
               fillRule="evenodd"
@@ -64,10 +116,11 @@ function Header() {
             ></path>
           </motion.svg>
           <Input
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: searchOpen ? 1 : 0 }}
-            transition={{ ease: "linear" }}
-            placeholder="Search for movie or tv show..."
+            initial={{
+              scaleX: 0,
+              borderColor: "rgba(255, 255, 255, 0)",
+            }}
+            placeholder="Search for movie or tv show"
           />
         </Search>
       </Col>
@@ -75,7 +128,7 @@ function Header() {
   );
 }
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)<{ $isTransparent?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,8 +138,9 @@ const Nav = styled.nav`
   background-color: black;
   font-size: 14px;
   padding: 20px 60px;
-  color: white;
   user-select: none;
+  color: ${(props) =>
+    props.$isTransparent ? props.theme.black.darker : props.theme.white.darker};
 `;
 
 const Col = styled.div`
@@ -117,16 +171,16 @@ const Item = styled.li`
   justify-content: center;
   flex-direction: column;
   margin-right: 20px;
-  color: ${(props) => props.theme.white.darker};
   transition: color 0.3s ease-in-out;
+  color: inherit;
   &:hover {
-    color: ${(props) => props.theme.white.lighter};
+    font-weight: bold;
   }
 `;
 
 const Search = styled.span`
   position: relative;
-  color: white;
+  color: inherit;
   display: flex;
   align-items: center;
   svg {
@@ -147,9 +201,16 @@ const Circle = styled(motion.span)`
 `;
 
 const Input = styled(motion.input)`
+  border-width: 1px;
+  border-style: solid;
+  background-color: transparent;
   transform-origin: right center;
   position: absolute;
-  left: -150px;
+  left: -186px;
+  padding: 8px;
+  padding-left: 36px;
+  z-index: -1;
+  width: 220px;
 `;
 
 export default Header;
