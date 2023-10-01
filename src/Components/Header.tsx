@@ -22,8 +22,8 @@ const logoVariants: Variants = {
 };
 
 const NavVariants: Variants = {
-  bgVisible: { backgroundColor: "rgba(0, 0, 0, 1)" },
-  bgInvisible: { backgroundColor: "rgba(0, 0, 0, 0)" },
+  bgBlack: { backgroundColor: "rgba(0, 0, 0, 0.8)" },
+  bgWhite: { backgroundColor: "rgba(255, 255, 255, 0.8)" },
 };
 
 function Header() {
@@ -52,7 +52,7 @@ function Header() {
 
   useMotionValueEvent(scrollY, "change", () => {
     setIsTransparent(scrollY.get() > 80);
-    console.log(isTransparent, searchOpen);
+    // console.log(isTransparent, searchOpen);
     inputAnimate(
       "input",
       {
@@ -69,7 +69,7 @@ function Header() {
   return (
     <Nav
       variants={NavVariants}
-      animate={isTransparent ? "bgInvisible" : "bgVisible"}
+      animate={isTransparent ? "bgWhite" : "bgBlack"}
       $isTransparent={isTransparent}
     >
       <Col>
@@ -135,7 +135,6 @@ const Nav = styled(motion.nav)<{ $isTransparent?: boolean }>`
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: black;
   font-size: 14px;
   padding: 20px 60px;
   user-select: none;

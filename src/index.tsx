@@ -79,7 +79,8 @@ table {
 }
 body {
   font-family: 'Source Sans 3', sans-serif;
-  background-color: white;
+  background-color: black;
+  color: ${(props) => props.theme.white.darker}
 }
 a {
   text-decoration: none;
