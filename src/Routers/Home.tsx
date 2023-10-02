@@ -24,6 +24,17 @@ const BoxVariants: Variants = {
   },
 };
 
+const InfoVariants: Variants = {
+  hover: {
+    opacity: 1,
+    transition: {
+      delay: 0.3,
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+};
+
 const OFFSET = 6;
 
 function Home() {
@@ -127,7 +138,12 @@ function Home() {
                       variants={BoxVariants}
                       initial="normal"
                       whileHover="hover"
-                    ></Box>
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Info variants={InfoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
                   )) || null}
               </Row>
             </AnimatePresence>
@@ -196,6 +212,22 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   }
   &:last-child {
     transform-origin: center right;
+  }
+`;
+
+const Info = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(props) => props.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
