@@ -32,3 +32,16 @@ export async function getMovies() {
   const response = await fetch(url, options);
   return await response.json();
 }
+
+export async function getSearch() {
+  const url = `${BASE_PATH}/search/movie?query=du&include_adult=true&language=en-US&page=1`;
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+    },
+  };
+  const response = await fetch(url, options);
+  return await response.json();
+}

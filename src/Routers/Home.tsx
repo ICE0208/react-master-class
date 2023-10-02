@@ -111,13 +111,15 @@ function Home() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
   return (
-    <Wrapper $preventScroll={Boolean(bigMovieMatch)}>
+    <Wrapper
+      $preventScroll={Boolean(bigMovieMatch)}
+      // ref={scrollRef}
+    >
       {isLoading ? (
         <Loader>Loading</Loader>
       ) : (
-        <>
+        <div style={{ overflowX: "hidden" }}>
           <Banner
             onClick={increaseIndex}
             $bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
@@ -193,7 +195,7 @@ function Home() {
               </>
             </AnimatePresence>
           )}
-        </>
+        </div>
       )}
     </Wrapper>
   );
@@ -202,8 +204,7 @@ function Home() {
 const Wrapper = styled.div<{ $preventScroll: boolean }>`
   background: black;
   height: 100vh;
-  overflow-x: hidden;
-  overflow-y: ${(props) => (props.$preventScroll ? "hidden" : null)};
+  overflow-y: ${(props) => (props.$preventScroll ? "hidden" : "visible")};
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
