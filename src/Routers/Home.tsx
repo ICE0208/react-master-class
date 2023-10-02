@@ -5,6 +5,25 @@ import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, Variants, motion } from "framer-motion";
 
+const BoxVariants: Variants = {
+  normal: {
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      delay: 0.3,
+      duration: 0.3,
+      type: "tween",
+    },
+  },
+};
+
 const OFFSET = 6;
 
 function Home() {
@@ -101,7 +120,13 @@ function Home() {
                   .map((movie) => (
                     <Box
                       key={movie.id}
-                      $bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                      $bgPhoto={makeImagePath(
+                        movie.backdrop_path || movie.poster_path,
+                        "w500"
+                      )}
+                      variants={BoxVariants}
+                      initial="normal"
+                      whileHover="hover"
                     ></Box>
                   )) || null}
               </Row>
@@ -166,6 +191,12 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   height: 200px;
   font-size: 64px;
   background-image: url(${(props) => props.$bgPhoto});
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
 `;
 
 export default Home;
