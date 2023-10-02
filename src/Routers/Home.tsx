@@ -4,6 +4,7 @@ import { IGetMoviesResult, getMovies } from "../api";
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { AnimatePresence, Variants, motion } from "framer-motion";
+import { useMatch, useNavigate } from "react-router-dom";
 
 const BoxVariants: Variants = {
   normal: {
@@ -38,6 +39,9 @@ const InfoVariants: Variants = {
 const OFFSET = 6;
 
 function Home() {
+  const navigate = useNavigate();
+  const bigMovieMatch = useMatch("/movies/:movieId");
+
   const { data, isLoading } = useQuery<IGetMoviesResult>({
     queryKey: ["movies", "nowPlaying"],
     queryFn: getMovies,
@@ -45,15 +49,6 @@ function Home() {
     refetchOnWindowFocus: false,
   });
   const [index, setIndex] = useState(0);
-  const increaseIndex = () => {
-    if (data) {
-      if (leaving) return;
-      setLeaving(true);
-      const totalMovies = data.results.length - 1;
-      const indexLength = Math.ceil(totalMovies / OFFSET);
-      setIndex((prev) => (prev + 1) % indexLength);
-    }
-  };
   const [leaving, setLeaving] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [rowVariants, setRowVariants] = useState<Variants>({
@@ -68,6 +63,19 @@ function Home() {
     },
   });
 
+  const increaseIndex = () => {
+    if (data) {
+      if (leaving) return;
+      setLeaving(true);
+      const totalMovies = data.results.length - 1;
+      const indexLength = Math.ceil(totalMovies / OFFSET);
+      setIndex((prev) => (prev + 1) % indexLength);
+    }
+  };
+
+  const onBoxClicked = (movieId: number) => {
+    navigate(`/movies/${movieId}`);
+  };
   useEffect(() => {
     // 윈도우 너비 변경 시 이벤트 핸들러
     const handleResize = () => {
@@ -130,6 +138,8 @@ function Home() {
                   ?.slice(OFFSET * index, OFFSET * index + OFFSET)
                   .map((movie) => (
                     <Box
+                      layoutId={movie.id + ""}
+                      onClick={() => onBoxClicked(movie.id)}
                       key={movie.id}
                       $bgPhoto={makeImagePath(
                         movie.backdrop_path || movie.poster_path,
@@ -148,6 +158,23 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
+          <AnimatePresence>
+            {bigMovieMatch && (
+              <motion.div
+                layoutId={bigMovieMatch.params.movieId}
+                style={{
+                  position: "absolute",
+                  width: "40vw",
+                  height: "80vh",
+                  backgroundColor: "red",
+                  top: 50,
+                  left: 0,
+                  right: 0,
+                  margin: "0 auto",
+                }}
+              ></motion.div>
+            )}
+          </AnimatePresence>
         </>
       )}
     </Wrapper>
@@ -206,6 +233,7 @@ const Box = styled(motion.div)<{ $bgPhoto: string }>`
   background-color: white;
   height: 200px;
   font-size: 64px;
+  cursor: pointer;
   background-image: url(${(props) => props.$bgPhoto});
   &:first-child {
     transform-origin: center left;
