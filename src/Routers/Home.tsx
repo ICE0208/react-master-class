@@ -76,6 +76,8 @@ function Home() {
   const onBoxClicked = (movieId: number) => {
     navigate(`/movies/${movieId}`);
   };
+  const onOverlayClick = () => navigate("/");
+
   useEffect(() => {
     // 윈도우 너비 변경 시 이벤트 핸들러
     const handleResize = () => {
@@ -106,7 +108,7 @@ function Home() {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper $preventScroll={Boolean(bigMovieMatch)}>
       {isLoading ? (
         <Loader>Loading</Loader>
       ) : (
@@ -158,33 +160,36 @@ function Home() {
               </Row>
             </AnimatePresence>
           </Slider>
-          <AnimatePresence>
-            {bigMovieMatch && (
-              <motion.div
-                layoutId={bigMovieMatch.params.movieId}
-                style={{
-                  position: "absolute",
-                  width: "40vw",
-                  height: "80vh",
-                  backgroundColor: "red",
-                  top: 50,
-                  left: 0,
-                  right: 0,
-                  margin: "0 auto",
-                }}
-              ></motion.div>
-            )}
-          </AnimatePresence>
+          <div style={{ height: "100vh" }}></div>
+
+          {bigMovieMatch && (
+            <AnimatePresence>
+              <>
+                <Overlay
+                  onClick={onOverlayClick}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                />
+                <BigMovie layoutId={bigMovieMatch.params.movieId}></BigMovie>
+              </>
+            </AnimatePresence>
+          )}
         </>
       )}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $preventScroll: boolean }>`
   background: black;
-  height: 200vh;
+  height: 100vh;
   overflow-x: hidden;
+  overflow-y: ${(props) => (props.$preventScroll ? "hidden" : null)};
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Loader = styled.div`
@@ -257,6 +262,25 @@ const Info = styled(motion.div)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
+
+const BigMovie = styled(motion.div)`
+  position: fixed;
+  width: 40vw;
+  height: 80vh;
+  background-color: black;
+  border: 1px solid white;
+  inset: 0;
+  margin: auto;
 `;
 
 export default Home;
