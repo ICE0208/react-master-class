@@ -78,6 +78,11 @@ function Home() {
   };
   const onOverlayClick = () => navigate("/");
 
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find(
+      (movie) => String(movie.id) === bigMovieMatch.params.movieId
+    );
   useEffect(() => {
     // 윈도우 너비 변경 시 이벤트 핸들러
     const handleResize = () => {
@@ -170,7 +175,21 @@ function Home() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 />
-                <BigMovie layoutId={bigMovieMatch.params.movieId}></BigMovie>
+                <BigMovie layoutId={bigMovieMatch.params.movieId}>
+                  {clickedMovie && (
+                    <>
+                      <BigCover
+                        $backgroundImage={makeImagePath(
+                          clickedMovie.backdrop_path ||
+                            clickedMovie.poster_path,
+                          "w500"
+                        )}
+                      />
+                      <BigTitle>{clickedMovie.title}</BigTitle>
+                      <BigOverView>{clickedMovie.overview}</BigOverView>
+                    </>
+                  )}
+                </BigMovie>
               </>
             </AnimatePresence>
           )}
@@ -277,10 +296,36 @@ const BigMovie = styled(motion.div)`
   position: fixed;
   width: 40vw;
   height: 80vh;
-  background-color: black;
-  border: 1px solid white;
+  background-color: ${(props) => props.theme.black.lighter};
   inset: 0;
   margin: auto;
+  border-radius: 15px;
+  overflow: hidden;
+`;
+
+const BigCover = styled.div<{ $backgroundImage: string }>`
+  object-fit: cover;
+  width: 100%;
+  height: 300px;
+  background-image: linear-gradient(to top, black, transparent),
+    url(${(props) => props.$backgroundImage});
+`;
+
+const BigTitle = styled.h3`
+  text-align: left;
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  font-size: 32px;
+  position: relative;
+  transform: translate(0, -100%);
+`;
+
+const BigOverView = styled.p`
+  padding: 20px;
+  color: ${(props) => props.theme.white.lighter};
+  font-size: 24px;
+  position: relative;
+  top: -30px;
 `;
 
 export default Home;
